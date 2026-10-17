@@ -27,10 +27,7 @@ testé ici, car je n'avais pas de modèle disponible.
 ## Utilisation
 
 ```bash
-pip install numpy
-python tests.py
-python agent.py "Compare plomb, fer et béton pour une transmission de 5 %"
-# avec un LLM local (non testé) :
+pip install -r requirements.txt
 #   ollama pull <modèle>   puis   python agent.py "..." --planner ollama --model <modèle>
 ```
 
