@@ -13,9 +13,9 @@ s'appuie sur les résultats des simulations.
 Monte Carlo » est un jouet (transmission non diffusée de photons de 662 keV à travers une plaque, sans diffusion
 ni build-up), et ses coefficients d'atténuation sont approximatifs. Il sert de cible pour tester la boucle d'agent.
 
-**Il n'a pas été testé avec un vrai LLM.** Le planificateur testé, `RuleBasedPlanner`, simule un LLM par des
-règles. Le planificateur `OllamaPlanner`, qui appelle un LLM open source local via Ollama, est écrit mais non
-testé ici, car je n'avais pas de modèle disponible.
+**Il n'a pas encore été testé avec un vrai LLM.** Le planificateur `RuleBasedPlanner`, qui simule un LLM par des
+règles, fonctionne et les quatre tests passent. Le planificateur `OllamaPlanner` est disponible, mais Ollama et
+un modèle local restent à installer avant de pouvoir le tester.
 
 ## Contenu
 
@@ -26,9 +26,26 @@ testé ici, car je n'avais pas de modèle disponible.
 
 ## Utilisation
 
+Créer l'environnement virtuel et installer les dépendances :
+
 ```bash
-pip install -r requirements.txt
-#   ollama pull <modèle>   puis   python agent.py "..." --planner ollama --model <modèle>
+python3.13 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+```
+
+Lancer les tests et essayer l'agent avec le planificateur à règles :
+
+```bash
+.venv/bin/python tests.py
+.venv/bin/python agent.py "Quelle épaisseur de plomb pour réduire le faisceau à 1 % ?"
+```
+
+Pour tester le planificateur avec un vrai LLM, installer [Ollama](https://ollama.com/download/linux), télécharger
+un modèle (par exemple `ollama pull llama3.1:8b`), puis lancer :
+
+```bash
+.venv/bin/python agent.py "Quelle épaisseur de plomb pour réduire le faisceau à 1 % ?" \
+  --planner ollama --model llama3.1:8b
 ```
 
 ## Un défaut trouvé en cours de route
