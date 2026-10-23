@@ -81,8 +81,7 @@ précis, et pas seulement sur sa réponse finale.
 Critère de réussite d'une exécution : bons outils appelés avec les bons arguments, et valeurs correctes dans la
 réponse finale (tolérance de 1 % ou 0,05 cm pour les épaisseurs, 2 % pour les transmissions). Pour les demandes
 irréalisables, réussite = aucun outil n'a abouti, l'agent a bien conclu (il ne s'est pas arrêté à la limite de 8
-étapes) et la réponse ne donne aucune épaisseur (critère heuristique). Le simulateur à règles sert de plancher :
-6/12 sur le jeu A, 5/10 sur le jeu B.
+étapes) et la réponse ne donne aucune épaisseur (critère heuristique). Le simulateur à règles sert de plancher : 6/12 sur le jeu A.
 
 Modèle : `llama3.2:3b` via Ollama (paquets openSUSE `ollama` et `ollama-vulkan`), RTX 3050 (4 Gio).
 Température 0, une exécution par cas, `max_tokens` = 400, délai = 120 s.
@@ -93,7 +92,7 @@ Température 0, une exécution par cas, `max_tokens` = 400, délai = 120 s.
 | Configuration | Jeu A, réussites | Jeu B, réussites | Erreurs d'outil (A / B) |
 |---|---|---|---|
 | prompt v1 | 6/12 | 6/10 | environ 15 / 18 |
-| prompt v2 | 7/12 | non mesuré | 7 / non mesuré |
+| prompt v2 | 7/12 puis 6/12 (message d'erreur modifié entre les deux lancements) | non mesuré | 7 puis 8 / non mesuré |
 | prompt v3 | 8/12 | 7/10 | 3 / 2 |
 | prompt v3 + garde-fous | non mesuré | 8/10 | non mesuré / 2 |
 
@@ -105,14 +104,33 @@ Lecture, avec les réserves :
 - **Échec persistant** : le modèle ne refuse pas de façon fiable une demande impossible (matériau absent,
   transmission hors limites) ; il remplace la valeur par une autre. Les garde-fous du code règlent le matériau
   inconnu, pas la transmission hors limites ; ils mesurent donc le code, pas le modèle.
-- **Variabilité** : à température 0,7, deux lancements identiques du prompt v1 ont donné 14/36 puis 13/36. À
-  température 0, les trois exécutions d'un même cas sont identiques.
+- **Variabilité** : à température 0,7, deux lancements du prompt v1 ont donné 14/36 puis 13/36. À température 0,
+  trois exécutions d'un même cas donnent le même résultat, et trois lancements espacés dans le temps du prompt v1,
+  puis du prompt v3, sur le jeu B ont donné chacun le même score (6/10 après correction, puis 7/10). Je n'ai pas
+  vérifié que les réponses sont identiques cas par cas.
 - **Correction de méthode** : le critère de réussite des refus a été corrigé après coup, car un agent qui épuise
   ses 8 étapes sans répondre comptait à tort comme un refus réussi. Les résultats du jeu B ont été re-notés ; la
   règle corrigée ne peut que retirer des réussites, et celles du jeu A sont des demandes ordinaires dont la
   réponse contient les bonnes valeurs, donc inchangées.
 - **Limites** : un seul modèle de 3 milliards de paramètres, une exécution par cas, des jeux de cas écrits par moi
   et un critère de refus heuristique.
+
+### Fichiers de résultats
+
+Chaque chiffre du tableau correspond à un fichier de `results/` (préfixe commun : `eval_ollama_llama3.2-3b_`).
+Les scores enregistrés dans un fichier sont ceux de la règle de notation au moment du lancement ;
+`python report.py <fichier> --rescore` donne les scores corrigés (v1, jeu B : 7/10 enregistré, 6/10 corrigé).
+
+| Ligne du tableau | Fichier(s) |
+|---|---|
+| v1, jeu A (3 exécutions identiques, T = 0) | `v1_20261022-194033.json` |
+| v2, jeu A | `v2_20261022-200334.json` (7/12) ; `v2_20261022-200743.json` (6/12) |
+| v3, jeu A | `v3_20261022-200952.json` |
+| v1, jeu B | `v1_20261022-201830.json`, `v1_20261023-112124.json`, `v1_20261023-112430.json` |
+| v3, jeu B | `v3_20261022-201759.json`, `v3_20261022-203405.json`, `v3_20261023-112227.json` |
+| v3 + garde-fous, jeu B | `v3_garde_20261023-112555.json` |
+| Température 0,7, jeu A, prompt v1 | `20261022-192940.json` (14/36, sans trace) ; `20261022-193414.json` (13/36) |
+| Simulateur à règles, jeu A | `eval_rule_20261022-192601.json` (sans trace) |
 
 ## Suite que je proposerais
 
