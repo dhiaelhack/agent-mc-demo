@@ -1,0 +1,558 @@
+{
+ "config": {
+  "planner": "ollama",
+  "model": "llama3.2:3b",
+  "runs": 1,
+  "temperature": 0.0,
+  "cases": "cases_holdout.json",
+  "prompt": "v1",
+  "guardrails": false,
+  "timeout": 120,
+  "max_tokens": 400,
+  "only": "",
+  "show_failures": false
+ },
+ "rows": [
+  {
+   "case": "h_fer_2pct",
+   "run": 0,
+   "seconds": 23.01,
+   "final": "Pour ramener le faisceau à 2 %, une épaisseur de fer de environ 6,52 cm est nécessaire.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750823
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0.02"
+     },
+     "result": {
+      "material": "fer",
+      "target_transmission": 0.02,
+      "thickness_cm": 6.517,
+      "simulations": 14,
+      "analytic_thickness_cm": 6.52
+     },
+     "t": 1792750825
+    },
+    {
+     "step": 2,
+     "final": "Pour ramener le faisceau à 2 %, une épaisseur de fer de environ 6,52 cm est nécessaire."
+    }
+   ]
+  },
+  {
+   "case": "h_beton_30pct",
+   "run": 0,
+   "seconds": 6.91,
+   "final": "L'épaisseur de béton nécessaire pour atteindre une transmission de 30 % des photons est d'environ 6,7 cm. Les simulations ont été effectuées 14 fois et l'analyse a confirmé une épaisseur de 6,69 cm. Les résultats sont cohérents avec les simulations. ",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "béton",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750828
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "béton",
+      "target_transmission": "0.3"
+     },
+     "result": {
+      "material": "béton",
+      "target_transmission": 0.3,
+      "thickness_cm": 6.674,
+      "simulations": 14,
+      "analytic_thickness_cm": 6.689
+     },
+     "t": 1792750830
+    },
+    {
+     "step": 2,
+     "final": "L'épaisseur de béton nécessaire pour atteindre une transmission de 30 % des photons est d'environ 6,7 cm. Les simulations ont été effectuées 14 fois et l'analyse a confirmé une épaisseur de 6,69 cm. Les résultats sont cohérents avec les simulations. "
+    }
+   ]
+  },
+  {
+   "case": "h_plomb_facteur100",
+   "run": 0,
+   "seconds": 5.22,
+   "final": "Pour atteindre un facteur d'atténuation de 100, vous aurez besoin d'envelopper le plomb avec au moins 3,65 cm de matière.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750835
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": "0.01"
+     },
+     "result": {
+      "material": "plomb",
+      "target_transmission": 0.01,
+      "thickness_cm": 3.649,
+      "simulations": 14,
+      "analytic_thickness_cm": 3.655
+     },
+     "t": 1792750837
+    },
+    {
+     "step": 2,
+     "final": "Pour atteindre un facteur d'atténuation de 100, vous aurez besoin d'envelopper le plomb avec au moins 3,65 cm de matière."
+    }
+   ]
+  },
+  {
+   "case": "h_plomb_absorbe90",
+   "run": 0,
+   "seconds": 4.78,
+   "final": "L'épaisseur de plomb nécessaire pour absorber 1 % du faisceau est d'environ 3,65 cm.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "calls_ok": false,
+   "final_ok": false,
+   "success": false,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750841
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": "0.01"
+     },
+     "result": {
+      "material": "plomb",
+      "target_transmission": 0.01,
+      "thickness_cm": 3.649,
+      "simulations": 14,
+      "analytic_thickness_cm": 3.655
+     },
+     "t": 1792750842
+    },
+    {
+     "step": 2,
+     "final": "L'épaisseur de plomb nécessaire pour absorber 1 % du faisceau est d'environ 3,65 cm."
+    }
+   ]
+  },
+  {
+   "case": "h_beton_10cm",
+   "run": 0,
+   "seconds": 4.1,
+   "final": "La transmission de photons de 662 keV à travers 10 cm de béton est de 16,41 % avec une erreur de 0,37 %.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "run_simulation",
+     "args": {
+      "material": "béton",
+      "thickness_cm": "10",
+      "n_particles": "10000"
+     },
+     "result": {
+      "material": "béton",
+      "thickness_cm": 10.0,
+      "n_particles": 10000,
+      "transmission": 0.1641,
+      "stat_error": 0.0037,
+      "analytic": 0.1653
+     },
+     "t": 1792750846
+    },
+    {
+     "step": 1,
+     "final": "La transmission de photons de 662 keV à travers 10 cm de béton est de 16,41 % avec une erreur de 0,37 %."
+    }
+   ]
+  },
+  {
+   "case": "h_plomb_demi_cm",
+   "run": 0,
+   "seconds": 7.44,
+   "final": "Avec 10 000 photons, 27,76 % d'entre eux passent à travers 1 cm de plomb, avec une erreur statistique de 0,45 %.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 3,
+   "tool_errors": 2,
+   "calls_ok": false,
+   "final_ok": false,
+   "success": false,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750849
+    },
+    {
+     "step": 1,
+     "tool": "run_simulation",
+     "args": {
+      "material": "plomb",
+      "thickness_cm": "0",
+      "n_particles": "10000"
+     },
+     "result": {
+      "error": "thickness_cm doit être > 0"
+     },
+     "t": 1792750851
+    },
+    {
+     "step": 2,
+     "tool": "run_simulation",
+     "args": {
+      "material": "plomb",
+      "thickness_cm": "1",
+      "n_particles": "10000"
+     },
+     "result": {
+      "material": "plomb",
+      "thickness_cm": 1.0,
+      "n_particles": 10000,
+      "transmission": 0.2776,
+      "stat_error": 0.00448,
+      "analytic": 0.28365
+     },
+     "t": 1792750853
+    },
+    {
+     "step": 3,
+     "final": "Avec 10 000 photons, 27,76 % d'entre eux passent à travers 1 cm de plomb, avec une erreur statistique de 0,45 %."
+    }
+   ]
+  },
+  {
+   "case": "h_eau_3cm",
+   "run": 0,
+   "seconds": 3.93,
+   "final": "La transmission de photons de 662 keV à travers 3 cm d'eau est de 76,96 % avec une erreur statistique de 0,42 %.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "run_simulation",
+     "args": {
+      "material": "eau",
+      "thickness_cm": "3",
+      "n_particles": "10000"
+     },
+     "result": {
+      "material": "eau",
+      "thickness_cm": 3.0,
+      "n_particles": 10000,
+      "transmission": 0.7696,
+      "stat_error": 0.00421,
+      "analytic": 0.7726
+     },
+     "t": 1792750857
+    },
+    {
+     "step": 1,
+     "final": "La transmission de photons de 662 keV à travers 3 cm d'eau est de 76,96 % avec une erreur statistique de 0,42 %."
+    }
+   ]
+  },
+  {
+   "case": "h_eau_et_plomb_25pct",
+   "run": 0,
+   "seconds": 8.89,
+   "final": "Pour atteindre une transmission de 25 % des photons, il faut un épaisseur de 16,108 cm d'eau. Pour le plomb, il n'est pas possible d'atteindre une transmission de 25 % en raison de sa grande absorption des photons.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 4,
+   "tool_errors": 3,
+   "calls_ok": false,
+   "final_ok": false,
+   "success": false,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "eau",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750861
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750862
+    },
+    {
+     "step": 2,
+     "tool": "find_thickness",
+     "args": {
+      "material": "eau",
+      "target_transmission": "0.25"
+     },
+     "result": {
+      "material": "eau",
+      "target_transmission": 0.25,
+      "thickness_cm": 16.108,
+      "simulations": 14,
+      "analytic_thickness_cm": 16.12
+     },
+     "t": 1792750864
+    },
+    {
+     "step": 3,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750865
+    },
+    {
+     "step": 4,
+     "final": "Pour atteindre une transmission de 25 % des photons, il faut un épaisseur de 16,108 cm d'eau. Pour le plomb, il n'est pas possible d'atteindre une transmission de 25 % en raison de sa grande absorption des photons."
+    }
+   ]
+  },
+  {
+   "case": "h_aluminium_inconnu",
+   "run": 0,
+   "seconds": 4.85,
+   "final": "Il n'est pas possible de trouver une épaisseur pour réduire le faisceau de moitié avec un matériau inconnu. Veuillez sélectionner un matériau parmi les options disponibles : plomb, fer, béton, eau.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 1,
+   "tool_errors": 1,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "aluminium",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "matériau inconnu : 'aluminium'. Matériaux disponibles : plomb, fer, béton, eau"
+     },
+     "t": 1792750870
+    },
+    {
+     "step": 1,
+     "final": "Il n'est pas possible de trouver une épaisseur pour réduire le faisceau de moitié avec un matériau inconnu. Veuillez sélectionner un matériau parmi les options disponibles : plomb, fer, béton, eau."
+    }
+   ]
+  },
+  {
+   "case": "h_transmission_0pct",
+   "run": 0,
+   "seconds": 11.22,
+   "final": "Arrêt : nombre maximal d'étapes atteint sans réponse finale.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 8,
+   "tool_errors": 8,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750875
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750876
+    },
+    {
+     "step": 2,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750877
+    },
+    {
+     "step": 3,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750879
+    },
+    {
+     "step": 4,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750880
+    },
+    {
+     "step": 5,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750882
+    },
+    {
+     "step": 6,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750883
+    },
+    {
+     "step": 7,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": "0"
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750884
+    },
+    {
+     "step": 8,
+     "stopped": "nombre maximal d'étapes atteint"
+    }
+   ]
+  }
+ ]
+}

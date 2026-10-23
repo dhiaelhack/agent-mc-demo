@@ -13,16 +13,28 @@ s'appuie sur les résultats des simulations.
 Monte Carlo » est un jouet (transmission non diffusée de photons de 662 keV à travers une plaque, sans diffusion
 ni build-up), et ses coefficients d'atténuation sont approximatifs. Il sert de cible pour tester la boucle d'agent.
 
-**Il n'a pas encore été testé avec un vrai LLM.** Le planificateur `RuleBasedPlanner`, qui simule un LLM par des
-règles, fonctionne et les quatre tests passent. Le planificateur `OllamaPlanner` est disponible, mais Ollama et
-un modèle local restent à installer avant de pouvoir le tester.
+**Test avec un vrai LLM (un seul essai manuel).** Configuration : openSUSE, Ollama avec le module Vulkan,
+RTX 3050 (4 Gio), modèle `llama3.2:3b` chargé à 100 % sur la carte. Sur la demande « Quelle épaisseur de plomb
+pour réduire le faisceau à 1 % ? », l'agent a appelé `find_thickness` avec le bon matériau et la bonne cible
+(3,649 cm contre 3,655 cm en analytique). Deux exécutions ont montré des défauts dans la trace : la réponse finale
+était un objet JSON et non une phrase, et la cible était passée tantôt en nombre (`0.01`), tantôt en chaîne
+(`"0.01"`). Par lecture du code, j'ai aussi vu que rien n'empêchait un modèle d'écrire `1` pour 1 %, ce qui donnerait
+une épaisseur nulle sans erreur. Tout cela est corrigé (voir ci-dessous). **Un seul essai ne prouve rien** :
+d'où le banc d'évaluation.
 
 ## Contenu
 
 - `mc_slab.py` : simulation Monte Carlo (tirage exponentiel de la distance avant interaction), recherche d'épaisseur
   par dichotomie, comparaison à la solution analytique.
-- `agent.py` : boucle d'agent, outils `run_simulation` et `find_thickness`, traçage JSON dans `traces/run.jsonl`.
-- `tests.py` : 4 tests (accord avec l'analytique, dichotomie, détection du matériau, gestion des erreurs d'outil).
+- `agent.py` : boucle d'agent, outils `run_simulation` et `find_thickness` (arguments validés), nouvel essai quand le
+  LLM renvoie un JSON invalide, traçage JSON dans `traces/run.jsonl`.
+- `cases.json` : 12 demandes avec les appels attendus (jeu A, utilisé pour concevoir les prompts).
+- `cases_holdout.json` : 10 demandes écrites après le prompt v3 et jamais utilisées pour le régler (jeu B, témoin).
+- `eval.py` : lance chaque cas et mesure appels corrects, valeurs correctes, sorties invalides, erreurs d'outil,
+  arrêts à 8 étapes et durée ; garde la trace complète de chaque exécution.
+- `report.py` : relit un fichier de résultats pour détailler les échecs ou re-noter avec les règles actuelles.
+- `tests.py` : 16 tests (simulation, dichotomie, validation des arguments, nouvel essai sur JSON invalide, garde-fous,
+  détection d'une réponse tronquée, notation du banc d'évaluation, jeu B bien formé et disjoint du jeu A).
 
 ## Utilisation
 
@@ -41,11 +53,21 @@ Lancer les tests et essayer l'agent avec le planificateur à règles :
 ```
 
 Pour tester le planificateur avec un vrai LLM, installer [Ollama](https://ollama.com/download/linux), télécharger
-un modèle (par exemple `ollama pull llama3.1:8b`), puis lancer :
+un modèle (par exemple `ollama pull llama3.2:3b`, qui tient sur une carte de 4 Gio ; vérifier la licence du modèle), puis lancer :
 
 ```bash
 .venv/bin/python agent.py "Quelle épaisseur de plomb pour réduire le faisceau à 1 % ?" \
-  --planner ollama --model llama3.1:8b
+  --planner ollama --model llama3.2:3b
+```
+
+Lancer le banc d'évaluation :
+
+```bash
+.venv/bin/python eval.py --planner rule                                   # base de comparaison à règles
+.venv/bin/python eval.py --planner ollama --model llama3.2:3b --runs 1 --temperature 0 --prompt v3
+.venv/bin/python eval.py --planner ollama --model llama3.2:3b --runs 1 --temperature 0 --prompt v3 --cases cases_holdout.json
+.venv/bin/python eval.py ... --guardrails --show-failures                # options
+.venv/bin/python report.py results/<fichier>.json --rescore              # re-noter sans relancer le modèle
 ```
 
 ## Un défaut trouvé en cours de route
@@ -53,6 +75,44 @@ un modèle (par exemple `ollama pull llama3.1:8b`), puis lancer :
 Mon simulateur de LLM détectait « eau » dans le mot « faisceau » et ajoutait de l'eau aux matériaux demandés.
 Corrigé et couvert par un test. Cela illustre le point qui m'intéresse : évaluer un agent sur des cas tests
 précis, et pas seulement sur sa réponse finale.
+
+## Évaluation
+
+Critère de réussite d'une exécution : bons outils appelés avec les bons arguments, et valeurs correctes dans la
+réponse finale (tolérance de 1 % ou 0,05 cm pour les épaisseurs, 2 % pour les transmissions). Pour les demandes
+irréalisables, réussite = aucun outil n'a abouti, l'agent a bien conclu (il ne s'est pas arrêté à la limite de 8
+étapes) et la réponse ne donne aucune épaisseur (critère heuristique). Le simulateur à règles sert de plancher :
+6/12 sur le jeu A, 5/10 sur le jeu B.
+
+Modèle : `llama3.2:3b` via Ollama (paquets openSUSE `ollama` et `ollama-vulkan`), RTX 3050 (4 Gio).
+Température 0, une exécution par cas, `max_tokens` = 400, délai = 120 s.
+
+- **Jeu A** (12 cas) : a servi à concevoir les prompts, donc non indépendant.
+- **Jeu B** (10 cas) : écrit après le prompt v3 et non utilisé pour le régler.
+
+| Configuration | Jeu A, réussites | Jeu B, réussites | Erreurs d'outil (A / B) |
+|---|---|---|---|
+| prompt v1 | 6/12 | 6/10 | environ 15 / 18 |
+| prompt v2 | 7/12 | non mesuré | 7 / non mesuré |
+| prompt v3 | 8/12 | 7/10 | 3 / 2 |
+| prompt v3 + garde-fous | non mesuré | 8/10 | non mesuré / 2 |
+
+Lecture, avec les réserves :
+
+- **Solide** : les exemples du prompt réduisent nettement les appels d'outil mal formés, sur les deux jeux de cas.
+- **Non démontré** : un gain de réussites. Les écarts sont d'un cas sur 10 ou 12, et un score de 7/10 est
+  compatible avec un vrai taux entre 40 % et 90 %.
+- **Échec persistant** : le modèle ne refuse pas de façon fiable une demande impossible (matériau absent,
+  transmission hors limites) ; il remplace la valeur par une autre. Les garde-fous du code règlent le matériau
+  inconnu, pas la transmission hors limites ; ils mesurent donc le code, pas le modèle.
+- **Variabilité** : à température 0,7, deux lancements identiques du prompt v1 ont donné 14/36 puis 13/36. À
+  température 0, les trois exécutions d'un même cas sont identiques.
+- **Correction de méthode** : le critère de réussite des refus a été corrigé après coup, car un agent qui épuise
+  ses 8 étapes sans répondre comptait à tort comme un refus réussi. Les résultats du jeu B ont été re-notés ; la
+  règle corrigée ne peut que retirer des réussites, et celles du jeu A sont des demandes ordinaires dont la
+  réponse contient les bonnes valeurs, donc inchangées.
+- **Limites** : un seul modèle de 3 milliards de paramètres, une exécution par cas, des jeux de cas écrits par moi
+  et un critère de refus heuristique.
 
 ## Suite que je proposerais
 

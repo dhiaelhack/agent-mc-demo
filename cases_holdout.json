@@ -1,0 +1,105 @@
+[
+ {
+  "id": "h_fer_2pct",
+  "request": "Quelle épaisseur de fer pour ramener le faisceau à 2 % ?",
+  "expected_calls": [
+   {
+    "tool": "find_thickness",
+    "material": "fer",
+    "target_transmission": 0.02
+   }
+  ]
+ },
+ {
+  "id": "h_beton_30pct",
+  "request": "Je veux que seulement 30 % du faisceau traverse le béton : quelle épaisseur ?",
+  "expected_calls": [
+   {
+    "tool": "find_thickness",
+    "material": "béton",
+    "target_transmission": 0.3
+   }
+  ]
+ },
+ {
+  "id": "h_plomb_facteur100",
+  "request": "De combien de centimètres de plomb ai-je besoin pour un facteur d'atténuation de 100 ?",
+  "expected_calls": [
+   {
+    "tool": "find_thickness",
+    "material": "plomb",
+    "target_transmission": 0.01
+   }
+  ]
+ },
+ {
+  "id": "h_plomb_absorbe90",
+  "request": "Épaisseur de plomb qui absorbe 90 % du faisceau ?",
+  "expected_calls": [
+   {
+    "tool": "find_thickness",
+    "material": "plomb",
+    "target_transmission": 0.1
+   }
+  ]
+ },
+ {
+  "id": "h_beton_10cm",
+  "request": "Quelle est la transmission à travers 10 cm de béton ?",
+  "expected_calls": [
+   {
+    "tool": "run_simulation",
+    "material": "béton",
+    "thickness_cm": 10
+   }
+  ]
+ },
+ {
+  "id": "h_plomb_demi_cm",
+  "request": "Combien de faisceau passe à travers 0,5 cm de plomb ?",
+  "expected_calls": [
+   {
+    "tool": "run_simulation",
+    "material": "plomb",
+    "thickness_cm": 0.5
+   }
+  ]
+ },
+ {
+  "id": "h_eau_3cm",
+  "request": "Simule 3 cm d'eau.",
+  "expected_calls": [
+   {
+    "tool": "run_simulation",
+    "material": "eau",
+    "thickness_cm": 3
+   }
+  ]
+ },
+ {
+  "id": "h_eau_et_plomb_25pct",
+  "request": "Donne-moi les épaisseurs d'eau et de plomb pour une transmission de 25 %.",
+  "expected_calls": [
+   {
+    "tool": "find_thickness",
+    "material": "eau",
+    "target_transmission": 0.25
+   },
+   {
+    "tool": "find_thickness",
+    "material": "plomb",
+    "target_transmission": 0.25
+   }
+  ]
+ },
+ {
+  "id": "h_aluminium_inconnu",
+  "request": "Quelle épaisseur d'aluminium pour réduire le faisceau de moitié ?",
+  "expected_calls": []
+ },
+ {
+  "id": "h_transmission_0pct",
+  "request": "Quelle épaisseur de fer pour une transmission de 0 % ?",
+  "expected_calls": []
+ }
+]

@@ -1,0 +1,641 @@
+{
+ "config": {
+  "planner": "ollama",
+  "model": "llama3.2:3b",
+  "runs": 1,
+  "temperature": 0.0,
+  "cases": "cases_holdout.json",
+  "prompt": "v3",
+  "guardrails": false,
+  "timeout": 120,
+  "max_tokens": 400,
+  "only": "",
+  "show_failures": false
+ },
+ "rows": [
+  {
+   "case": "h_fer_2pct",
+   "run": 0,
+   "seconds": 3.5,
+   "final": "Une épaisseur de fer de 6,52 cm est nécessaire pour ramener le faisceau à 2 %.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": 0.02
+     },
+     "result": {
+      "material": "fer",
+      "target_transmission": 0.02,
+      "thickness_cm": 6.517,
+      "simulations": 14,
+      "analytic_thickness_cm": 6.52
+     },
+     "t": 1792750886
+    },
+    {
+     "step": 1,
+     "final": "Une épaisseur de fer de 6,52 cm est nécessaire pour ramener le faisceau à 2 %."
+    }
+   ]
+  },
+  {
+   "case": "h_beton_30pct",
+   "run": 0,
+   "seconds": 3.05,
+   "final": "L'épaisseur de béton nécessaire pour une transmission de 30 % est de 6,69 cm.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 1,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "béton",
+      "target_transmission": 0.3
+     },
+     "result": {
+      "material": "béton",
+      "target_transmission": 0.3,
+      "thickness_cm": 6.674,
+      "simulations": 14,
+      "analytic_thickness_cm": 6.689
+     },
+     "t": 1792750890
+    },
+    {
+     "step": 1,
+     "final": "L'épaisseur de béton nécessaire pour une transmission de 30 % est de 6,69 cm."
+    }
+   ]
+  },
+  {
+   "case": "h_plomb_facteur100",
+   "run": 0,
+   "seconds": 4.81,
+   "final": "Pour une transmission de 1 % à travers le plomb, vous aurez besoin d'environ 3,65 cm.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": 0.01
+     },
+     "result": {
+      "material": "plomb",
+      "target_transmission": 0.01,
+      "thickness_cm": 3.649,
+      "simulations": 14,
+      "analytic_thickness_cm": 3.655
+     },
+     "t": 1792750893
+    },
+    {
+     "step": 1,
+     "tool": "run_simulation",
+     "args": {
+      "material": "plomb",
+      "thickness_cm": 3.649
+     },
+     "result": {
+      "material": "plomb",
+      "thickness_cm": 3.649,
+      "n_particles": 200000,
+      "transmission": 0.01001,
+      "stat_error": 0.00022,
+      "analytic": 0.01007
+     },
+     "t": 1792750894
+    },
+    {
+     "step": 2,
+     "final": "Pour une transmission de 1 % à travers le plomb, vous aurez besoin d'environ 3,65 cm."
+    }
+   ]
+  },
+  {
+   "case": "h_plomb_absorbe90",
+   "run": 0,
+   "seconds": 5.4,
+   "final": "Un faisceau de 662 keV passe à travers 1,83 cm de plomb avec une transmission de 0,09986 ou 9,986 %.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": 0.1
+     },
+     "result": {
+      "material": "plomb",
+      "target_transmission": 0.1,
+      "thickness_cm": 1.829,
+      "simulations": 14,
+      "analytic_thickness_cm": 1.827
+     },
+     "t": 1792750898
+    },
+    {
+     "step": 1,
+     "tool": "run_simulation",
+     "args": {
+      "material": "plomb",
+      "thickness_cm": 1.829
+     },
+     "result": {
+      "material": "plomb",
+      "thickness_cm": 1.829,
+      "n_particles": 200000,
+      "transmission": 0.09986,
+      "stat_error": 0.00067,
+      "analytic": 0.0998
+     },
+     "t": 1792750899
+    },
+    {
+     "step": 2,
+     "final": "Un faisceau de 662 keV passe à travers 1,83 cm de plomb avec une transmission de 0,09986 ou 9,986 %."
+    }
+   ]
+  },
+  {
+   "case": "h_beton_10cm",
+   "run": 0,
+   "seconds": 15.91,
+   "final": "Arrêt : nombre maximal d'étapes atteint sans réponse finale.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 8,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": false,
+   "success": false,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "run_simulation",
+     "args": {
+      "material": "béton",
+      "thickness_cm": 10
+     },
+     "result": {
+      "material": "béton",
+      "thickness_cm": 10.0,
+      "n_particles": 200000,
+      "transmission": 0.16509,
+      "stat_error": 0.00083,
+      "analytic": 0.1653
+     },
+     "t": 1792750903
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "béton",
+      "target_transmission": 0.16509
+     },
+     "result": {
+      "material": "béton",
+      "target_transmission": 0.16509,
+      "thickness_cm": 9.999,
+      "simulations": 14,
+      "analytic_thickness_cm": 10.007
+     },
+     "t": 1792750904
+    },
+    {
+     "step": 2,
+     "tool": "run_simulation",
+     "args": {
+      "material": "béton",
+      "thickness_cm": 10.007
+     },
+     "result": {
+      "material": "béton",
+      "thickness_cm": 10.007,
+      "n_particles": 200000,
+      "transmission": 0.1649,
+      "stat_error": 0.00083,
+      "analytic": 0.16509
+     },
+     "t": 1792750906
+    },
+    {
+     "step": 3,
+     "tool": "find_thickness",
+     "args": {
+      "material": "béton",
+      "target_transmission": 0.1649
+     },
+     "result": {
+      "material": "béton",
+      "target_transmission": 0.1649,
+      "thickness_cm": 10.007,
+      "simulations": 14,
+      "analytic_thickness_cm": 10.013
+     },
+     "t": 1792750907
+    },
+    {
+     "step": 4,
+     "tool": "run_simulation",
+     "args": {
+      "material": "béton",
+      "thickness_cm": 10.013
+     },
+     "result": {
+      "material": "béton",
+      "thickness_cm": 10.013,
+      "n_particles": 200000,
+      "transmission": 0.16478,
+      "stat_error": 0.00083,
+      "analytic": 0.16491
+     },
+     "t": 1792750912
+    },
+    {
+     "step": 5,
+     "tool": "find_thickness",
+     "args": {
+      "material": "béton",
+      "target_transmission": 0.16478
+     },
+     "result": {
+      "material": "béton",
+      "target_transmission": 0.16478,
+      "thickness_cm": 10.014,
+      "simulations": 14,
+      "analytic_thickness_cm": 10.017
+     },
+     "t": 1792750914
+    },
+    {
+     "step": 6,
+     "tool": "run_simulation",
+     "args": {
+      "material": "béton",
+      "thickness_cm": 10.017
+     },
+     "result": {
+      "material": "béton",
+      "thickness_cm": 10.017,
+      "n_particles": 200000,
+      "transmission": 0.16464,
+      "stat_error": 0.00083,
+      "analytic": 0.16479
+     },
+     "t": 1792750916
+    },
+    {
+     "step": 7,
+     "tool": "find_thickness",
+     "args": {
+      "material": "béton",
+      "target_transmission": 0.16464
+     },
+     "result": {
+      "material": "béton",
+      "target_transmission": 0.16464,
+      "thickness_cm": 10.018,
+      "simulations": 14,
+      "analytic_thickness_cm": 10.022
+     },
+     "t": 1792750917
+    },
+    {
+     "step": 8,
+     "stopped": "nombre maximal d'étapes atteint"
+    }
+   ]
+  },
+  {
+   "case": "h_plomb_demi_cm",
+   "run": 0,
+   "seconds": 6.39,
+   "final": "Un faisceau passe à travers 0,5 cm de plomb avec une transmission de 53,03 %.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 3,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "run_simulation",
+     "args": {
+      "material": "plomb",
+      "thickness_cm": 0.5
+     },
+     "result": {
+      "material": "plomb",
+      "thickness_cm": 0.5,
+      "n_particles": 200000,
+      "transmission": 0.5303,
+      "stat_error": 0.00112,
+      "analytic": 0.53259
+     },
+     "t": 1792750919
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": 0.5303
+     },
+     "result": {
+      "material": "plomb",
+      "target_transmission": 0.5303,
+      "thickness_cm": 0.5,
+      "simulations": 14,
+      "analytic_thickness_cm": 0.503
+     },
+     "t": 1792750920
+    },
+    {
+     "step": 2,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": 0.5303
+     },
+     "result": {
+      "material": "plomb",
+      "target_transmission": 0.5303,
+      "thickness_cm": 0.5,
+      "simulations": 14,
+      "analytic_thickness_cm": 0.503
+     },
+     "t": 1792750922
+    },
+    {
+     "step": 3,
+     "final": "Un faisceau passe à travers 0,5 cm de plomb avec une transmission de 53,03 %."
+    }
+   ]
+  },
+  {
+   "case": "h_eau_3cm",
+   "run": 0,
+   "seconds": 8.17,
+   "final": "L'eau permet à 77 % des photons de passer à travers une épaisseur de 3,012 cm.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 4,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "run_simulation",
+     "args": {
+      "material": "eau",
+      "thickness_cm": 3
+     },
+     "result": {
+      "material": "eau",
+      "thickness_cm": 3.0,
+      "n_particles": 200000,
+      "transmission": 0.77083,
+      "stat_error": 0.00094,
+      "analytic": 0.7726
+     },
+     "t": 1792750925
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "eau",
+      "target_transmission": 0.77
+     },
+     "result": {
+      "material": "eau",
+      "target_transmission": 0.77,
+      "thickness_cm": 3.012,
+      "simulations": 14,
+      "analytic_thickness_cm": 3.039
+     },
+     "t": 1792750927
+    },
+    {
+     "step": 2,
+     "tool": "run_simulation",
+     "args": {
+      "material": "eau",
+      "thickness_cm": 3.012,
+      "n_particles": 200000
+     },
+     "result": {
+      "material": "eau",
+      "thickness_cm": 3.012,
+      "n_particles": 200000,
+      "transmission": 0.77006,
+      "stat_error": 0.00094,
+      "analytic": 0.7718
+     },
+     "t": 1792750929
+    },
+    {
+     "step": 3,
+     "tool": "find_thickness",
+     "args": {
+      "material": "eau",
+      "target_transmission": 0.77
+     },
+     "result": {
+      "material": "eau",
+      "target_transmission": 0.77,
+      "thickness_cm": 3.012,
+      "simulations": 14,
+      "analytic_thickness_cm": 3.039
+     },
+     "t": 1792750930
+    },
+    {
+     "step": 4,
+     "final": "L'eau permet à 77 % des photons de passer à travers une épaisseur de 3,012 cm."
+    }
+   ]
+  },
+  {
+   "case": "h_eau_et_plomb_25pct",
+   "run": 0,
+   "seconds": 5.81,
+   "final": "Pour une transmission de 25 %, l'épaisseur d'eau est d'environ 16,1 cm et l'épaisseur de plomb est d'environ 1,1 cm. ",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 0,
+   "calls_ok": true,
+   "final_ok": true,
+   "success": true,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "eau",
+      "target_transmission": 0.25
+     },
+     "result": {
+      "material": "eau",
+      "target_transmission": 0.25,
+      "thickness_cm": 16.108,
+      "simulations": 14,
+      "analytic_thickness_cm": 16.12
+     },
+     "t": 1792750933
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "plomb",
+      "target_transmission": 0.25
+     },
+     "result": {
+      "material": "plomb",
+      "target_transmission": 0.25,
+      "thickness_cm": 1.1,
+      "simulations": 14,
+      "analytic_thickness_cm": 1.1
+     },
+     "t": 1792750935
+    },
+    {
+     "step": 2,
+     "final": "Pour une transmission de 25 %, l'épaisseur d'eau est d'environ 16,1 cm et l'épaisseur de plomb est d'environ 1,1 cm. "
+    }
+   ]
+  },
+  {
+   "case": "h_aluminium_inconnu",
+   "run": 0,
+   "seconds": 4.8,
+   "final": "Pour réduire le faisceau de moitié, il faut passer 1,15 cm de fer.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "calls_ok": false,
+   "final_ok": false,
+   "success": false,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "aluminium",
+      "target_transmission": 0.5
+     },
+     "result": {
+      "error": "matériau inconnu : 'aluminium'. Matériaux disponibles : plomb, fer, béton, eau"
+     },
+     "t": 1792750939
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": 0.5
+     },
+     "result": {
+      "material": "fer",
+      "target_transmission": 0.5,
+      "thickness_cm": 1.148,
+      "simulations": 14,
+      "analytic_thickness_cm": 1.155
+     },
+     "t": 1792750941
+    },
+    {
+     "step": 2,
+     "final": "Pour réduire le faisceau de moitié, il faut passer 1,15 cm de fer."
+    }
+   ]
+  },
+  {
+   "case": "h_transmission_0pct",
+   "run": 0,
+   "seconds": 4.69,
+   "final": "Une épaisseur de 7,663 cm de fer est nécessaire pour une transmission de 0,01 %.",
+   "crash": null,
+   "invalid_outputs": 0,
+   "tool_calls": 2,
+   "tool_errors": 1,
+   "calls_ok": false,
+   "final_ok": false,
+   "success": false,
+   "trace": [
+    {
+     "step": 0,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": 0
+     },
+     "result": {
+      "error": "target_transmission doit être strictement entre 0 et 1 (ex. 0.01 pour 1 %)"
+     },
+     "t": 1792750944
+    },
+    {
+     "step": 1,
+     "tool": "find_thickness",
+     "args": {
+      "material": "fer",
+      "target_transmission": 0.01
+     },
+     "result": {
+      "material": "fer",
+      "target_transmission": 0.01,
+      "thickness_cm": 7.663,
+      "simulations": 14,
+      "analytic_thickness_cm": 7.675
+     },
+     "t": 1792750945
+    },
+    {
+     "step": 2,
+     "final": "Une épaisseur de 7,663 cm de fer est nécessaire pour une transmission de 0,01 %."
+    }
+   ]
+  }
+ ]
+}
